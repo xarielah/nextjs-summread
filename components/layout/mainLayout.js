@@ -18,7 +18,7 @@ const MainLayout = ({ children }) => (
 
         <Navbar />
 
-        <Container maxW="container.md">
+        <Container maxW="1500px">
 
             {children}
         </Container>

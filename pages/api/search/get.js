@@ -6,19 +6,22 @@ const app = nextConnect()
 
 
 export default async function getSearchResults(req, res) {
-    const { query: { q } } = req
+    let { query: { q, page } } = req
+    const limit = 10
+    page = page - 1
+
 
     try {
         await ConnectDB()
-
-        // const results = await Summary.find({ $or: [{ title: { $regex: q } }, { description: { $regex: q } }, { authorName: { $regex: q } }] })
-        const results = await Summary.find({ $text: { $search: q.trim() } })
+        const results = await Summary.find({ $text: { $search: q.trim() } }).skip(page * limit).limit(limit)
+        const count = (await Summary.find({ $text: { $search: q.trim() } })).length
 
         return res.status(200).json({
             searchTerm: q,
-            count: results.length,
+            count: count,
             results
         })
+
     } catch (error) {
         return res.json({ error })
     }

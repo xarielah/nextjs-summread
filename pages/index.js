@@ -3,7 +3,7 @@ import {
   Box,
   Heading,
   Text,
-  Image
+  Image,
 } from "@chakra-ui/react"
 import logo from '../public/images/book-logo.png'
 import SearchInput from "../components/searchbar"
@@ -16,7 +16,7 @@ const Website = () => {
         justify="center"
         align="center">
         <Box flexGrow={1} mt={3}>
-          <Image src={logo.src} maxW="400px" alt="logo" />
+          <Image src={logo.src} maxW="60%" alt="logo" />
           <Heading as="h2">
             Search for Academic Summaries
           </Heading>
