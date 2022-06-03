@@ -1,29 +1,19 @@
 import {
     Box,
-    Container,
-    Flex,
-    Heading
+    Flex
 } from '@chakra-ui/react'
-import Logo from '../components/navLogo'
+import Logo from '../components/logo'
 
 const Navbar = () => {
     return (
         <Box
-            position={'relative'}
-            as="nav"
-            w="100%"
-            bg={'#ffffff40'}
-            style={{ backdropFilter: 'blur(10px)' }}
-            zIndex={1}
-            align="center"
-            display="flex">
-
-            <Container
-                p={5}
-                maxW='container.md'>
+            bg="gray.100"
+            p="3">
+            <Flex>
                 <Logo />
-            </Container>
-        </Box >
+                {/* TODO: Implement login */}
+            </Flex>
+        </Box>
     )
 }
 

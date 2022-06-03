@@ -19,6 +19,7 @@ const MainLayout = ({ children }) => (
         <Navbar />
 
         <Container maxW="container.md">
+
             {children}
         </Container>
     </Box >

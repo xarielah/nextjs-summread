@@ -20,7 +20,7 @@ const Website = () => {
           <Heading as="h2">
             Search for Academic Summaries
           </Heading>
-          <Text color={'dimmedGray'} fontSize=".95rem" as="sub" fontStyle={'italic'}>In search of achieving knowlage faster &amp; better.</Text>
+          <Text color={'blackAlpha.500'} fontSize=".95rem" as="sub" fontStyle={'italic'}>In search of achieving knowlage faster &amp; better.</Text>
           <Box mt={8}>
             <SearchInput />
           </Box>

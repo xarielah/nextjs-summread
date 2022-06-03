@@ -2,7 +2,7 @@ import ConnectDB from "../../../utils/connect"
 import Summary from "../../../models/summarySchema"
 
 export default async function createNewSumm(req, res) {
-    const { title, description, locked, topic } = req.body
+    const { title, description, isLocked, authorName, authorID, topic } = req.body
     const method = req.method
 
     switch (method) {
@@ -15,15 +15,17 @@ export default async function createNewSumm(req, res) {
                 const newSummary = await Summary.create({
                     title,
                     description,
-                    locked,
-                    topic
+                    isLocked,
+                    topic,
+                    authorName,
+                    authorID
                 })
                 return res.status(200).json({ newSummary })
             } catch (error) {
                 return res.status(error.status).json({ error })
             }
         default:
-            return res.status(403).end('Method is not allowed')
+            return res.status(405).end('Method is not allowed')
     }
 
 }

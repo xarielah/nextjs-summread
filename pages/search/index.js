@@ -1,20 +1,32 @@
-import { useRouter } from "next/router"
-import { useState } from 'react'
-import React from 'react'
-import ViewResults from "./results"
-import GetSearchResults from './datareciever'
+import Layout from '../../components/layout/resultsLayout'
+import ViewResults from '../../components/searchpage/results'
+import { useRouter } from 'next/router'
+import {
+    Text,
+    Box
+} from '@chakra-ui/react'
 
-const SearchResults = () => {
-    const [results, setResults] = useState()
-    let query = useRouter().query.q
-    GetSearchResults().then(res => setResults(res))
+export async function getServerSideProps(context) {
+    const { q } = context.query
+    const res = await fetch(`http://localhost:3000/api/search/get?q=${q}`)
+    const data = await res.json()
 
-    if (results) {
-        return (
-            <ViewResults query={query} />
-        )
+    return {
+        props: { data }, // will be passed to the page component as props
     }
-
 }
 
-export default SearchResults
+const Search = ({ data }) => {
+    let { query: { q } } = useRouter()
+    const query = q && q.trim()
+
+    return (
+        <Layout query={query}>
+            <Box>
+                <ViewResults data={data} />
+            </Box>
+        </Layout>
+    )
+}
+
+export default Search

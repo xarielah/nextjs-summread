@@ -4,11 +4,11 @@ import Layout from '../components/layout/mainLayout'
 
 function MyApp({ Component, pageProps, router }) {
   return (
-    <Layout>
-      <ChakraProvider theme={theme}>
+    <ChakraProvider theme={theme}>
+      <Layout>
         <Component {...pageProps} key={router.route} router={router} />
-      </ChakraProvider>
-    </Layout>
+      </Layout>
+    </ChakraProvider>
   )
 }
 

@@ -22,6 +22,7 @@ const SearchInput = ({ value }) => {
                     onChange={e => setSearchValue(e.target.value)}
                     type="text"
                     name='q'
+                    bg={'white'}
                     defaultValue={value && value}
                     placeholder="Search for knowlage..." />
                 <InputRightAddon p={0}>
