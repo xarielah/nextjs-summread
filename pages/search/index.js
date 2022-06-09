@@ -1,9 +1,10 @@
 import Layout from '../../components/layout/resultsLayout'
 import ViewResults from '../../components/searchpage/results'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 import {
-    Text,
-    Box
+    Box,
+    SkeletonText
 } from '@chakra-ui/react'
 
 export async function getServerSideProps(context) {
@@ -21,14 +22,23 @@ export async function getServerSideProps(context) {
     }
 }
 
+const Skele = () => (
+    <Box padding='3' boxShadow={'md'} w="max-content">
+        <SkeletonText my='4' w="40ch" noOfLines={4} spacing='4' />
+    </Box>
+)
+
 const Search = ({ data, page }) => {
     let { query: { q } } = useRouter()
     const query = q && q.trim()
+    const [showSkele, setShowSkele] = useState(true)
+    const sleep = (ms) => new Promise(resolve => setTimeout(() => { return resolve, setShowSkele(false) }, ms))
+    sleep(0)
 
     return (
         <Layout query={query}>
             <Box>
-                <ViewResults page={page} data={data} />
+                {showSkele ? <Skele /> : <ViewResults page={page} data={data} />}
             </Box>
         </Layout>
     )

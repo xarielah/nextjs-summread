@@ -5,7 +5,7 @@ import {
 
 
 const Logo = () => (
-    <Link href="/" ml={5}>
+    <Link href="/" style={{ textDecoration: 'none' }} ml={5}>
         <Heading size="md" color={'dimmedGray'} fontStyle={'italic'}>For Students, By Students</Heading>
     </Link>
 )

@@ -15,7 +15,7 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
-    privacyMode: {
+    isPrivate: {
         type: Boolean,
         default: false
     }
