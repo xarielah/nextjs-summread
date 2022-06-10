@@ -1,19 +1,27 @@
 import { Schema, model, models } from "mongoose";
 
 const userSchema = new Schema({
-    username: {
+    firstName: {
         type: String,
         required: true,
-        unique: true
+    },
+    lastName: {
+        type: String,
+        required: true,
     },
     email: {
         type: String,
         require: true,
         unique: true
     },
+    password: {
+        type: String,
+        require: true,
+        unique: true
+    },
     isBanned: {
-        type: Boolean,
-        default: false
+        type: Array,
+        default: [false, null]
     },
     isPrivate: {
         type: Boolean,
@@ -21,6 +29,10 @@ const userSchema = new Schema({
     }
 })
 
-const Topic = models.Topic || model('Topic', topicSchema)
+userSchema.virtual('fullName').get(function () {
+    return `${this.firstName} ${this.lastName}`
+})
 
-export default Topic
+const User = models.User || model('User', userSchema)
+
+export default User
