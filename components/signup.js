@@ -42,6 +42,7 @@ const SignupPage = () => {
         setErrorReg(false)
         setSuccess(true)
         reset()
+        window.location = '/'
     }
     const badReg = () => {
         setSuccess(false)
