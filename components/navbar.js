@@ -5,6 +5,14 @@ import {
 import Logo from '../components/logo'
 import NavbarAuth from './navbarAuth'
 
+export async function getServerSideProps(context) {
+    console.log(context.req)
+
+    return {
+        props: {}
+    }
+}
+
 const Navbar = () => {
     return (
         <Box
@@ -13,7 +21,6 @@ const Navbar = () => {
             <Flex justify={'space-between'}>
                 <Logo />
                 <NavbarAuth />
-                {/* TODO: Implement login */}
             </Flex>
         </Box>
     )

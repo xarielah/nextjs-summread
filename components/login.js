@@ -13,19 +13,22 @@ import { useForm, Controller } from "react-hook-form"
 import { useState } from 'react'
 import axios from "axios"
 import DisplayAlert from "./alert/alert"
+import Router from 'next/router'
+import Cookies from "js-cookie"
 
 const handleLogin = async (data, successfulLogin, badLogin) => {
     try {
-        await axios.post('/api/auth/login', data)
-        successfulLogin()
+        const { token } = await axios.post('/api/auth/login', data).then(res => res.data)
+        successfulLogin(token)
     } catch (error) {
-        badLogin()
+        badLogin({ error })
     }
 }
 
 const LoginPage = () => {
     const [success, setSuccess] = useState(false)
     const [loginError, setLoginError] = useState(false)
+    const [errMessage, setErrMessage] = useState('')
     const [showPass, setShowPass] = useState(false)
     const { handleSubmit, control, reset, formState: { errors, isValid, isSubmitting } } = useForm({
         mode: 'all',
@@ -36,14 +39,21 @@ const LoginPage = () => {
     })
 
     const swap = () => setShowPass(prev => !prev)
-    const successfulLogin = () => {
+    const delay = (ms) => new Promise(resolve => setTimeout(ms, resolve))
+
+    const successfulLogin = (token) => {
+        console.log(token)
+        Cookies.set('token', token, { expires: 604800 }) // A week in seconds
         setLoginError(false)
         setSuccess(true)
         reset()
-        window.location = '/'
+        delay(1200)
+        Router.push('/')
     }
 
-    const badLogin = () => {
+    const badLogin = ({ error }) => {
+        if (error.response.status === 500) setErrMessage("Our servers are a bit rebelious today... we'll take care of them asap!")
+        else setErrMessage('')
         setSuccess(false)
         setLoginError(true)
         reset()
@@ -61,7 +71,7 @@ const LoginPage = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={2}>
                 {loginError && <DisplayAlert type={'error'}>
-                    Bad credentials / Email doesn&apos;t exist...
+                    {errMessage !== '' ? errMessage : "Bad credentials / Email doesn't exist..."}
                 </DisplayAlert>}
                 {success && <DisplayAlert type={'success'}>
                     Logged In! You&apos;re being redirected...
