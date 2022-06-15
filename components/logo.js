@@ -6,7 +6,7 @@ import {
 
 const Logo = () => (
     <Link href="/" style={{ textDecoration: 'none' }} ml={5}>
-        <Heading size="md" color={'dimmedGray'} fontStyle={'italic'}>For Students, By Students</Heading>
+        <Heading size="md" color={'dimmedGray'} fontStyle={'italic'}>Summaread</Heading>
     </Link>
 )
 

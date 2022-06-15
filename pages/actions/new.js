@@ -18,10 +18,20 @@ import {
 } from '@chakra-ui/react'
 import Head from 'next/head'
 import { useForm, Controller } from 'react-hook-form'
+import { useSession } from 'next-auth/react'
+import Wrongway from '../../components/error/wrongway'
+import LoadingComponent from '../../components/loading.js'
+import axios from 'axios'
+import { useState } from 'react'
+import FormData from 'form-data'
 
 
-const NewSummaryForm = () => {
-    const { handleSubmit, control, formState: { errors } } = useForm({
+
+const NewSummaryForm = ({ user }) => {
+    const [docFile, setDocFile] = useState(null)
+    console.log(user)
+
+    const { handleSubmit, control, formState: { errors, isSubmitting } } = useForm({
         defaultValues: {
             title: '',
             description: '',
@@ -30,7 +40,28 @@ const NewSummaryForm = () => {
             file: ''
         }
     })
-    const onSubmit = (data) => console.log(data)
+
+    // const { field } = useController({ control, name: 'file' })
+
+    const onSubmit = async (data) => {
+        const formData = new FormData()
+        formData.append('title', data.title)
+        formData.append('authorName', user.name)
+        formData.append('authorID', user.email)
+        formData.append('description', data.description)
+        formData.append('topicID', data.topic)
+        formData.append('isLocked', data.isLocked)
+        formData.append('file', docFile)
+
+
+        await axios.post('/api/actions/new', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+            .catch(e => console.log(e))
+            .then(res => console.log(res))
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -42,7 +73,7 @@ const NewSummaryForm = () => {
                     spacing={10}
                     align="stretch">
                     <Box>
-                        <Heading as="h4" fontSize="1.4rem" color="purple.900">New Contribution<Badge ml={2}>Posting as &apos;name&apos;</Badge></Heading>
+                        <Heading as="h4" fontSize="1.4rem" color="purple.900">New Contribution<Badge ml={2}>Posting as &apos;{user.name}&apos;</Badge></Heading>
                         <Text mt={1}>Fill out all the fields, make sure to be informative and short as possible.</Text>
                     </Box>
 
@@ -98,11 +129,9 @@ const NewSummaryForm = () => {
 
                     <InputGroup flexDirection={'column'}>
                         <Heading fontSize="1.25rem" color="purple.900">Upload Files</Heading>
-                        <Controller
-                            control={control}
-                            name="file"
-                            rules={{ required: true }}
-                            render={({ field }) => <Input isInvalid={errors.file} type="file" bg="white" mt={1} p={1} {...field} />} />
+
+                        <Input onChange={(e) => setDocFile(e.target.files[0])} isInvalid={errors.file || !docFile} type="file" bg="white" mt={1} p={1} />
+
                         <Text as="sub" mt={3}>Allowed formats: *.pptx, *.docx *.xls *.xlsx *.doc *.pdf</Text>
                     </InputGroup>
 
@@ -125,7 +154,7 @@ const NewSummaryForm = () => {
                         </Flex>
                     </InputGroup>
 
-                    <Button type="submit" colorScheme={'purple'}>Send Post For Review</Button>
+                    <Button type="submit" colorScheme={'purple'} isLoading={isSubmitting}>Send Post For Review</Button>
                 </VStack>
             </Box>
         </form>
@@ -151,6 +180,10 @@ const ThankYou = () => {
 }
 
 const AddNewSummary = () => {
+    const { data: session, status } = useSession()
+    if (status === 'loading') return <LoadingComponent />
+    if (!session) return <Wrongway />
+
     return (
         <>
             <Head>
@@ -163,7 +196,7 @@ const AddNewSummary = () => {
                     p={3}>
 
                     <ThankYou />
-                    <NewSummaryForm />
+                    <NewSummaryForm user={session.user} />
 
                 </Box>
             </Container>

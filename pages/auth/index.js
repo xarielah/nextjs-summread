@@ -1,9 +1,8 @@
-import { Badge, Box, Text, Heading } from '@chakra-ui/react'
-import { } from '@chakra-ui/icons'
-import { useState } from 'react'
-import SignupPage from '../../components/signup'
-import LoginPage from '../../components/login'
+import { Box, Heading, Button } from '@chakra-ui/react'
+import Wrongway from '../../components/error/wrongway'
 import AuthLayout from '../../components/layout/authLayout'
+import { useSession, signIn } from 'next-auth/react'
+import { BsGoogle } from 'react-icons/bs'
 
 export async function getServerSideProps(context) {
     const { query: { action } } = context
@@ -14,35 +13,27 @@ export async function getServerSideProps(context) {
     }
 }
 
-const Auth = ({ parameter }) => {
-    const initialValue = parameter === 'register' ? false : true
-    const [isLogin, setIsLogin] = useState(initialValue)
+const Auth = () => {
+    const { data: session, status } = useSession()
+    if (status === 'loading') return <Heading align="center" mt={10}>Loading...</Heading>
+    if (session) return <Wrongway />
+
+
+
+    const providers = [{
+        name: 'Google',
+        Icon: BsGoogle
+    }]
 
     return (
         <Box>
             <AuthLayout>
-                {isLogin ? <LoginPage /> : <SignupPage />}
-            </AuthLayout>
-            <SwapPages isLogin={isLogin} swap={() => setIsLogin(prev => !prev)} />
-        </Box>
+                <Box align="center">
+                    {providers.map(({ name, Icon }, index) => <Button key={index} leftIcon={<Icon />} colorScheme={'purple'} w="60%" onClick={() => signIn(name.toLowerCase(), { callbackUrl: '/' })}>Sign in via {name}</Button>)}
+                </Box>
+            </AuthLayout >
+        </Box >
     )
 }
-
-const SwapPages = ({ isLogin, swap }) => (
-    < Box align="center" mt={5} >
-        {
-            isLogin ?
-                <Text color={'purple.800'} fontWeight='medium'>
-                    Our community is waiting for you!
-                    <Badge cursor="pointer" onClick={swap} ml={'1'}>Signup</Badge>
-                </Text >
-                :
-                <Text color={'purple.800'} fontWeight='medium'>
-                    We&apos;d like to see you again!
-                    <Badge cursor="pointer" onClick={swap} ml={'1'}>Login</Badge>
-                </Text>
-        }
-    </Box >
-)
 
 export default Auth

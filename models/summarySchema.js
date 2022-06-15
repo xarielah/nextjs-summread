@@ -2,6 +2,7 @@ import { Schema, model, models } from "mongoose";
 
 // TODO: Remove defaults on Schema
 
+
 const summarySchema = new Schema({
     title: {
         type: String,
@@ -69,6 +70,10 @@ const summarySchema = new Schema({
     isLocked: {
         type: Boolean,
         default: false,
+        required: true
+    },
+    fileUrl: {
+        type: String,
         required: true
     }
 })

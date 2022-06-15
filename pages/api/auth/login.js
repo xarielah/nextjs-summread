@@ -10,7 +10,10 @@ const generateToken = (getUser) => {
         name: getUser.firstName,
         lastName: getUser.lastName,
         fullName: `${getUser.firstName} ${getUser.lastName}`,
-        id: getUser._id
+        id: getUser._id,
+        email: getUser.email,
+        isPrivate: getUser.isPrivate,
+        isBanned: getUser.isBanned
     }
 
     const token = jwt.sign(payload, JWT_KEY)
