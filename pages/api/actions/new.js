@@ -22,7 +22,7 @@ export const config = {
 export async function fileHandler(req, res) {
     const form = formidable()
     const now = new Date()
-    const fileName = `${now.getTime()}`
+    const fileGenericName = `${now.getTime()}`
 
     const allowedFileTypes = [
         'pptx',
@@ -33,10 +33,8 @@ export async function fileHandler(req, res) {
         'pdf'
     ]
 
-    const statusUpload = form.parse(req, async (err, fields, files) => {
+    form.parse(req, async (err, fields, files) => {
         const fileType = files.file?.originalFilename?.split('.').pop()
-
-        console.log(fields)
 
         if (!files.file) {
             return {
@@ -46,37 +44,36 @@ export async function fileHandler(req, res) {
         }
 
         if (allowedFileTypes.indexOf(fileType) === -1) {
-            console.log('bad file type')
             return {
                 status: 405,
                 message: 'bad file type'
             }
         }
 
+        const fileName = `${fileGenericName}.${fileType}`
+
         try {
-            return s3Client.putObject({
+
+            s3Client.putObject({
                 Bucket: process.env.DO_SPACES_BUCKET,
-                Key: `${fileName}.${files.file.originalFilename.split('.').pop()}`,
+                Key: `${fileName}`,
                 // Key: files.file.originalFilename,
                 Body: fs.createReadStream(files.file.filepath),
                 ACL: "public-read"
+
             }, async () => true)
+
+            const newSummary = await Summary.create({
+                ...fields,
+                fileUrl: `https://${process.env.DO_SPACES_BUCKET}.${process.env.DO_SPACES_URL}/${fileName}`
+            })
+
+            return newSummary
         } catch (error) {
             console.log(error)
             throw new Error('Error Occured While Uploading File')
         }
     });
-
-    // const newSummary = await Summary.create({
-    //     title,
-    //     description,
-    //     isLocked,
-    //     topic,
-    //     authorName,
-    //     authorID,
-    //     fileUrl: `https://${process.env.DO_SPACES_BUCKET}/${process.env.DO_SPACES_URL}`
-    // })
-    return statusUpload
 }
 
 export default async function createNewSumm(req, res) {
@@ -90,12 +87,12 @@ export default async function createNewSumm(req, res) {
                     .then(() => console.log('Connected to db!'))
                     .catch(e => console.log(e))
 
-                const status = await fileHandler(req, res)
-                console.dir(status._events.fields)
+                await fileHandler(req, res)
 
                 return res.status(200).json()
             } catch (error) {
-                return res.status(error.status).json({ error })
+                console.log(error)
+                return res.status(500).end()
             }
         default:
             return res.status(405).end('Method is not allowed')

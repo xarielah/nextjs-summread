@@ -31,14 +31,11 @@ const Skele = () => (
 const Search = ({ data, page }) => {
     let { query: { q } } = useRouter()
     const query = q && q.trim()
-    // const [showSkele, setShowSkele] = useState(true)
-    // const sleep = (ms) => new Promise(resolve => setTimeout(() => { return resolve, setShowSkele(false) }, ms))
-    // sleep(500)
 
     return (
         <Layout query={query}>
             <Box>
-                {showSkele ? <Skele /> : <ViewResults page={page} data={data} />}
+                <ViewResults page={page} data={data} />
             </Box>
         </Layout>
     )

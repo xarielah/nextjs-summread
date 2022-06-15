@@ -63,7 +63,7 @@ const LoggedUser = ({ user }) => {
                     </Flex>
                 </MenuItem>
                 <MenuItem>
-                    <Link href="/actions/new">Create New Post</Link>
+                    <Link href="/actions/new" style={{ textDecoration: 'none' }}>Create New Post</Link>
                 </MenuItem>
                 <MenuItem><Text onClick={() => signOut({ callbackUrl: '/' })} w="100%" color={'red'} align="center">Logout</Text></MenuItem>
             </MenuList>
