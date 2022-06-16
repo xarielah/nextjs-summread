@@ -15,13 +15,13 @@ import Logo from '../components/logo'
 import { useSession, signOut } from 'next-auth/react'
 
 const Navbar = () => {
-    const { data: session } = useSession()
-
+    const { data: session, status } = useSession()
+    if (status === 'loading') return ''
     return (
         <Box
             bg="gray.100"
             p="3">
-            <Flex justify={'space-between'}>
+            <Flex justify={'space-between'} align="center">
                 <Logo />
                 {session ? <LoggedUser user={session.user} /> : <LoginPlease />}
             </Flex>
@@ -62,10 +62,10 @@ const LoggedUser = ({ user }) => {
                         </Box>
                     </Flex>
                 </MenuItem>
-                <MenuItem>
-                    <Link href="/actions/new" style={{ textDecoration: 'none' }}>Create New Post</Link>
+                <MenuItem py={3}>
+                    <Link href="/actions/new" fontStyle="italic" fontWeight={'bold'} color="gray.500" style={{ textDecoration: 'none' }}>Create New Post</Link>
                 </MenuItem>
-                <MenuItem><Text onClick={() => signOut({ callbackUrl: '/' })} w="100%" color={'red'} align="center">Logout</Text></MenuItem>
+                <MenuItem py={3}><Text onClick={() => signOut({ callbackUrl: '/' })} w="100%" color={'red'} align="center">Logout</Text></MenuItem>
             </MenuList>
         </Menu>
     )

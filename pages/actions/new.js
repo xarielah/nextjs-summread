@@ -26,12 +26,13 @@ import LoadingComponent from '../../components/loading.js'
 import axios from 'axios'
 import { useState } from 'react'
 import FormData from 'form-data'
+import SuccessPost from '../../components/success'
 
 
-const NewSummaryForm = ({ user }) => {
+const NewSummaryForm = ({ user, successPost, setSuccess: setSuccessPost }) => {
     const [docFile, setDocFile] = useState(null)
     const [fileError, setFileError] = useState(false)
-    const [successPost, setSuccessPost] = useState(false)
+    const [postData, setPostData] = useState({})
 
     const allowedFileTypes = [
         'pptx',
@@ -85,9 +86,12 @@ const NewSummaryForm = ({ user }) => {
             }
         })
             .catch(e => console.log(e))
-            .then(res => console.log(res))
+            .then(res => {
+                setSuccessPost(true)
+                setPostData(res.data)
+            })
     }
-
+    if (successPost) return <SuccessPost data={postData} successPost={successPost} />
     return (
         <>
             {fileError && <BadFileType close={closeModal} message={'File format is not allowed, please add a different file that is allowed.'} />}
@@ -181,7 +185,7 @@ const NewSummaryForm = ({ user }) => {
                             </Flex>
                         </InputGroup>
 
-                        <Button type="submit" colorScheme={'purple'} isInvalid={!docFile && true} isLoading={isSubmitting}>Send Post For Review</Button>
+                        <Button type="submit" colorScheme={'purple'} isLoading={isSubmitting}>Send Post For Review</Button>
                     </VStack>
                 </Box>
             </form>
@@ -189,28 +193,13 @@ const NewSummaryForm = ({ user }) => {
     )
 }
 
-const ThankYou = () => {
-    return (
-        <>
-            <Box mb={5} bg={'blackAlpha.100'} borderRadius={'xl'} p={8}>
-                <Heading as="h4" color={'purple.700'}>Thank you!</Heading>
-                <Text as="p" mt={2} color="purple.900" fontSize={'1.2rem'}>
-                    Thank you for contributing to our engine. <br />
-                    Our main purpose here is to give back to the Academic Community which are you, The Students,
-                    a worthy platform to use in case of need. <br /><br />
-                    We cannot thank you enough, <b>Academic Summaries Team</b>.
-                </Text>
-            </Box>
-
-            <Divider mb={{ base: 3, lg: 0 }} />
-        </>
-    )
-}
-
 const AddNewSummary = () => {
+    const [successPost, setSuccessPost] = useState(false)
     const { data: session, status } = useSession()
     if (status === 'loading') return <LoadingComponent />
     if (!session) return <Wrongway />
+
+    const setSuccess = () => setSuccessPost(true)
 
     return (
         <>
@@ -223,8 +212,7 @@ const AddNewSummary = () => {
                 <Box
                     p={3}>
 
-                    <ThankYou />
-                    <NewSummaryForm user={session.user} />
+                    <NewSummaryForm user={session.user} successPost={successPost} setSuccess={setSuccess} />
 
                 </Box>
             </Container>

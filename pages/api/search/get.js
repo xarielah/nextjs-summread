@@ -1,9 +1,5 @@
 import Summary from '../../../models/summarySchema'
-import nextConnect from 'next-connect'
 import ConnectDB from '../../../utils/connect'
-
-const app = nextConnect()
-
 
 export default async function getSearchResults(req, res) {
     let { query: { q, page } } = req
@@ -12,7 +8,7 @@ export default async function getSearchResults(req, res) {
 
 
     try {
-        await ConnectDB()
+        await ConnectDB().then(() => console.log('DB Connection successful'))
         const results = await Summary.find({ $text: { $search: q.trim() } }).skip(page * limit).limit(limit)
         const count = (await Summary.find({ $text: { $search: q.trim() } })).length
 
@@ -23,7 +19,8 @@ export default async function getSearchResults(req, res) {
         })
 
     } catch (error) {
-        return res.json({ error })
+        console.log(error)
+        return res.status(500).json({ error })
     }
 }
 

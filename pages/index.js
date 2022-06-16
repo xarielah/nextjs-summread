@@ -19,7 +19,7 @@ const Website = () => {
         <Box flexGrow={1} mt={3}>
           <Image src={logo.src} maxW="30%" alt="logo" />
           <Heading as="h2">
-            Summaread
+            Summread
           </Heading>
           <Text color={'blackAlpha.500'} fontSize=".95rem" as="sub" fontStyle={'italic'}>In search of achieving knowlage faster &amp; better.</Text>
           <Box mt={8}>

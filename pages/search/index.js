@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import {
     Box,
-    SkeletonText
 } from '@chakra-ui/react'
 
 export async function getServerSideProps(context) {
@@ -13,6 +12,7 @@ export async function getServerSideProps(context) {
     console.log(setPage)
     const res = await fetch(`http://localhost:3000/api/search/get?q=${q}&page=${!page || !isNaN(page) ? parseInt(setPage) : 1}`)
     const data = await res.json()
+    console.log(data)
 
     return {
         props: {
@@ -22,15 +22,12 @@ export async function getServerSideProps(context) {
     }
 }
 
-const Skele = () => (
-    <Box padding='3' boxShadow={'md'} w="max-content">
-        <SkeletonText my='4' w="40ch" noOfLines={4} spacing='4' />
-    </Box>
-)
 
 const Search = ({ data, page }) => {
     let { query: { q } } = useRouter()
     const query = q && q.trim()
+
+    console.log(data)
 
     return (
         <Layout query={query}>
