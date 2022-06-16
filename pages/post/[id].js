@@ -6,13 +6,12 @@ import {
     Text,
     Button,
     Box,
-    Flex,
-    Container,
-    Badge,
     Link,
 } from '@chakra-ui/react'
 import Layout from '../../components/layout/resultsLayout'
 import Head from 'next/head'
+import PostLocked from '../../components/postlocked'
+import { useSession } from 'next-auth/react'
 
 export async function getServerSideProps(context) {
     const { id } = context.query
@@ -26,11 +25,15 @@ export async function getServerSideProps(context) {
 }
 
 const Post = ({ post }) => {
+    const { data: session } = useSession()
+
     if (!post) return <FourOFour />
+    if (post.isLocked && !session) return <PostLocked />
+
     const postDate = new Date(post.createdAt)
     const dateSeparator = '/'
     const createdAt = `${postDate.getUTCDate() > 9 ? postDate.getUTCDate() : '0' + postDate.getUTCDate()}${dateSeparator}${(postDate.getUTCMonth() + 1) > 9 ? postDate.getUTCMonth() + 1 : '0' + (postDate.getUTCMonth() + 1)}${dateSeparator}${postDate.getUTCFullYear()}`
-    console.log(post.isLocked)
+
     return (
         <>
             <Head>

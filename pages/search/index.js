@@ -12,7 +12,6 @@ export async function getServerSideProps(context) {
     console.log(setPage)
     const res = await fetch(`http://localhost:3000/api/search/get?q=${q}&page=${!page || !isNaN(page) ? parseInt(setPage) : 1}`)
     const data = await res.json()
-    console.log(data)
 
     return {
         props: {
