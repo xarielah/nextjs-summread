@@ -27,6 +27,7 @@ import axios from 'axios'
 import { useState } from 'react'
 import FormData from 'form-data'
 import SuccessPost from '../../components/success'
+import AnimationLayout from '../../components/layout/animationLayout'
 
 
 const NewSummaryForm = ({ user, successPost, setSuccess: setSuccessPost }) => {
@@ -202,7 +203,7 @@ const AddNewSummary = () => {
     const setSuccess = () => setSuccessPost(true)
 
     return (
-        <>
+        <AnimationLayout>
             <Head>
                 <title>Post a new summary</title>
             </Head>
@@ -216,7 +217,7 @@ const AddNewSummary = () => {
 
                 </Box>
             </Container>
-        </>
+        </AnimationLayout>
     )
 }
 

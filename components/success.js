@@ -9,30 +9,32 @@ import {
     VStack
 } from '@chakra-ui/react'
 import Head from 'next/head'
+import AnimationLayout from './layout/animationLayout'
 
 const Success = ({ data: post, successPost }) => {
-    console.log(post)
     const firstName = post.authorName.split(' ')[0]
     return (
-        <>
+        <AnimationLayout>
             <Head>
                 <title>Post Successfuly Created! || {post.title}</title>
             </Head>
             <Box>
+                {successPost && <ThankYou />}
                 <Box my={4}>
                     <Heading mb={2} size="xl" align="center">Your Post Was Created Successfuly!</Heading>
                     <Container maxW='container.sm' fontSize="1.2rem">
                         <Text>{firstName}, Your post &apos;<b>{post.title}</b>&apos; of category &apos;<b>{post.topicID}</b>&apos; has been created successfuly!</Text>
                     </Container>
                 </Box>
-                {successPost && <ThankYou />}
                 <VStack>
                     <Box align="center" mt={10}>
-                        <Button colorScheme="green" w="90%">Go To Post</Button>
+                        <Link href={`/post/${post._id}`} style={{ textDecoration: 'none' }}>
+                            <Button colorScheme="green" w="90%">Go To Yout Post</Button>
+                        </Link>
                     </Box>
                 </VStack>
             </Box>
-        </>
+        </AnimationLayout>
     )
 }
 

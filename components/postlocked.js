@@ -9,7 +9,7 @@ import {
     Button
 } from '@chakra-ui/react'
 
-import NFBunny from './../public/images/404-bunny.png'
+import NFBunny from './../public/images/locked-bunny.png'
 
 const PostLocked = () => {
     return (

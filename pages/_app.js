@@ -2,36 +2,23 @@ import { ChakraProvider } from "@chakra-ui/react"
 import theme from '../lib/theme'
 import Layout from '../components/layout/mainLayout'
 import { SessionProvider } from 'next-auth/react'
+import { AnimatePresence } from "framer-motion"
 
 function MyApp({ Component, pageProps: { session, ...pageProps }, router }) {
 
   return (
     <SessionProvider session={session}>
       <ChakraProvider theme={theme}>
-        <Layout>
-          <Component {...pageProps} key={router.route} router={router} />
-        </Layout>
+        <AnimatePresence exitBeforeEnter initial={true}>
+          <Layout>
+            <Component {...pageProps} key={router.route} router={router} />
+          </Layout>
+        </AnimatePresence>
       </ChakraProvider >
     </SessionProvider>
   )
 
 
 }
-
-// MyApp.getInitialProps = async (appContext) => {
-//   const { token } = appContext.ctx.req.cookies
-//   let user
-//   try {
-//     const payload = verify(token, process.env.JWT_KEY)
-//     user = payload
-//   } catch (error) {
-//     user = {}
-//   }
-
-//   const appProps = await App.getInitialProps(appContext);
-//   console.log(appProps)
-
-//   return { user }
-// }
 
 export default MyApp

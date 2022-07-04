@@ -15,6 +15,7 @@ import {
     ChevronLeftIcon,
     ChevronRightIcon
 } from '@chakra-ui/icons'
+import NextLink from 'next/link'
 
 const Pagination = ({ count, currentPage, q, nextPage, prevPage }) => {
     // TODO: Fixated max pages to display
@@ -32,9 +33,11 @@ const Pagination = ({ count, currentPage, q, nextPage, prevPage }) => {
             {pages.map((page, index) => {
                 return (
                     <Box key={index}>
-                        <Link href={`/search?q=${q}&page=${page + 1}`}>
-                            <Button bg={page + 1 == currentPage && 'gray.200'}>{page + 1}</Button>
-                        </Link>
+                        <NextLink href={`/search?q=${q}&page=${page + 1}`}>
+                            <Link>
+                                <Button bg={page + 1 == currentPage && 'gray.200'}>{page + 1}</Button>
+                            </Link>
+                        </NextLink>
                     </Box>
                 )
             })}
@@ -62,10 +65,12 @@ const ViewResults = ({ data, page }) => {
                             return (
                                 <Container maxW={'120ch'} key={index}>
                                     <Box>
-                                        <Link href={`/post/${item._id}`}>
-                                            <Heading mb={0} size="md" color={'blue.600'}>{item.title}</Heading>
-                                        </Link>
-                                        <Text fontSize={'.9rem'}>Author: <Link href={`/author/${item.authorID}`}>{item.authorName}</Link></Text>
+                                        <NextLink href={`/post/${item._id}`}>
+                                            <Link>
+                                                <Heading mb={0} size="md" color={'blue.600'}>{item.title}</Heading>
+                                            </Link>
+                                        </NextLink>
+                                        <Text fontSize={'.9rem'}>Author: {item.authorName}</Text>
                                     </Box>
                                     <Text mt={1} as="p">{item.description}</Text>
                                 </Container>

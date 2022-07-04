@@ -4,15 +4,7 @@ import AuthLayout from '../../components/layout/authLayout'
 import { useSession, signIn } from 'next-auth/react'
 import { BsGoogle } from 'react-icons/bs'
 import LoadingComponent from '../../components/loading'
-
-export async function getServerSideProps(context) {
-    const { query: { action } } = context
-    const parameter = action ? action : null
-
-    return {
-        props: { parameter }
-    }
-}
+import AnimationLayout from '../../components/layout/animationLayout'
 
 const Auth = () => {
     const { data: session, status } = useSession()
@@ -27,14 +19,16 @@ const Auth = () => {
     }]
 
     return (
-        <Box align="center" mt={8}>
-            <AuthLayout>
-                <Heading fontStyle="italic" size="lg" mb={10} color="gray.600">Signin Options</Heading>
-                <Box align="center">
-                    {providers.map(({ name, Icon }, index) => <Button key={index} leftIcon={<Icon />} colorScheme={'purple'} w="60%" onClick={() => signIn(name.toLowerCase(), { callbackUrl: '/' })}>Sign in via {name}</Button>)}
-                </Box>
-            </AuthLayout >
-        </Box >
+        <AnimationLayout>
+            <Box align="center" mt={8}>
+                <AuthLayout>
+                    <Heading fontStyle="italic" size="lg" mb={10} color="gray.600">Signin Options</Heading>
+                    <Box align="center">
+                        {providers.map(({ name, Icon }, index) => <Button key={index} leftIcon={<Icon />} colorScheme={'purple'} w="60%" onClick={() => signIn(name.toLowerCase(), { callbackUrl: '/' })}>Sign in via {name}</Button>)}
+                    </Box>
+                </AuthLayout >
+            </Box >
+        </AnimationLayout>
     )
 }
 

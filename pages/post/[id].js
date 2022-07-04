@@ -12,6 +12,8 @@ import Layout from '../../components/layout/resultsLayout'
 import Head from 'next/head'
 import PostLocked from '../../components/postlocked'
 import { useSession } from 'next-auth/react'
+import AnimationLayout from '../../components/layout/animationLayout'
+import LoadingComponent from '../../components/loading'
 
 export async function getServerSideProps(context) {
     const { id } = context.query
@@ -25,8 +27,9 @@ export async function getServerSideProps(context) {
 }
 
 const Post = ({ post }) => {
-    const { data: session } = useSession()
+    const { data: session, status } = useSession()
 
+    if (status === 'loading') return <LoadingComponent />
     if (!post) return <FourOFour />
     if (post.isLocked && !session) return <PostLocked />
 
@@ -35,7 +38,7 @@ const Post = ({ post }) => {
     const createdAt = `${postDate.getUTCDate() > 9 ? postDate.getUTCDate() : '0' + postDate.getUTCDate()}${dateSeparator}${(postDate.getUTCMonth() + 1) > 9 ? postDate.getUTCMonth() + 1 : '0' + (postDate.getUTCMonth() + 1)}${dateSeparator}${postDate.getUTCFullYear()}`
 
     return (
-        <>
+        <AnimationLayout>
             <Head>
                 <title>{post.topicID} || {post.title}</title>
             </Head>
@@ -59,7 +62,7 @@ const Post = ({ post }) => {
                     <Link href={post.fileUrl} style={{ textDecoration: 'none' }} ><Button colorScheme={'linkedin'}>Download Summary</Button></Link>
                 </Box>
             </Layout>
-        </>
+        </AnimationLayout>
     )
 }
 

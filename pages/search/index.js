@@ -26,8 +26,6 @@ const Search = ({ data, page }) => {
     let { query: { q } } = useRouter()
     const query = q && q.trim()
 
-    console.log(data)
-
     return (
         <Layout query={query}>
             <Box>
