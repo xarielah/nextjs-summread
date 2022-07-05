@@ -104,7 +104,7 @@ const EditPost = ({ post }) => {
             <Box align="center" mt={5}>
               <NextLink href={`/post/${post._id}`}>
                 <Link mx={3} color={'purple.600'}>
-                  Go Back
+                  Go To Post
                 </Link>
               </NextLink>
               <Button mx={3} type={'submit'} isLoading={isSubmitting} colorScheme="purple" size="sm">
