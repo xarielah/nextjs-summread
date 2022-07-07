@@ -11,7 +11,10 @@ const MyPosts = () => {
   const url = process.env.PROD ? process.env.PROD : process.env.LOCAL;
 
   const { data: session, status } = useSession();
-  const { data: posts, error } = useSWR(`${url}/api/actions/get?user=${session ? session.user.email : null}`, fetcher);
+  const { data: posts, error } = useSWR(
+    session ? `${url}/api/actions/get?user=${session ? session.user.email : null}` : null,
+    fetcher
+  );
 
   if (status === 'loading' || !posts) return <LoadingComponent />;
   if (!session || error) return <Wrongway />;

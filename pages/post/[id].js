@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react';
 import AnimationLayout from '../../components/layout/animationLayout';
 import LoadingComponent from '../../components/loading';
 import ShowActionsBar from '../../components/postowneractions';
+import CommentsSection from '../../components/comments';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -85,6 +86,8 @@ const Post = ({ post }) => {
             <Button colorScheme={'linkedin'}>Download Summary</Button>
           </Link>
         </Box>
+        <Divider my={2} />
+        <CommentsSection comments={post.comments} />
       </Layout>
     </AnimationLayout>
   );

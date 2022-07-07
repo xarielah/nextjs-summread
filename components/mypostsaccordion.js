@@ -41,11 +41,15 @@ const AccordionBody = ({ post }) => {
 };
 
 const AccordionOfPosts = ({ posts }) => {
-  <Accordion allowToggle allowMultiple>
-    {posts.map((post, index) => (
-      <AnimationLayout delay={index} key={index}>
-        <AccordionBody post={post} />
-      </AnimationLayout>
-    ))}
-  </Accordion>;
+  return (
+    <Accordion allowToggle allowMultiple>
+      {posts.map((post, index) => (
+        <AnimationLayout delay={index} key={index}>
+          <AccordionBody post={post} />
+        </AnimationLayout>
+      ))}
+    </Accordion>
+  );
 };
+
+export default AccordionOfPosts;

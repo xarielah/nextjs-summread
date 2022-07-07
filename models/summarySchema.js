@@ -37,6 +37,10 @@ const summarySchema = new Schema({
     type: Date,
     default: null,
   },
+  comments: {
+    type: Array,
+    default: [],
+  },
 });
 
 const Summary = models.Summary || model('Summary', summarySchema);
